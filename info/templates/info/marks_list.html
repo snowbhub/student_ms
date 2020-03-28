@@ -1,0 +1,46 @@
+{% extends 'info/base.html' %}
+    {% load static %}
+
+    {% block content %}
+                  <div class="card mb-3">
+            <div class="card-header">
+              <i class="fas fa-table"></i>
+            <b>Оцінки</b></div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                        <th>Заняття ID</th>
+                        <th>Назва заняття</th>
+                        <th>Поточна1</th>
+                        <th>Поточна2</th>
+                        <th>Поточна3</th>
+                        <th>Атестація1</th>
+                        <th>Атестація2</th>
+                        <th>Семестрова</th>
+                        <th>Середній</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for sc in sc_list %}
+                    <tr>
+                        <td>{{ sc.course_id }}</td>
+                        <td>{{sc.course.name}}</td>
+                        {% for m in sc.marks_set.all %}
+                            <td>{{ m.marks1 }}</td>
+                        {% endfor %}
+                        <th>{{ sc.get_cie }}</th>
+                    </tr>
+                    {% empty %}
+                            <p>студент не має занять</p>
+                    {% endfor %}
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+    {% endblock %}

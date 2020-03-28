@@ -1,0 +1,111 @@
+{% extends 'info/base.html' %}
+    {% load static %}
+
+    {% block content %}
+        <!-- Core plugin JavaScript-->
+                  <div class="card mb-3">
+            <div class="card-header">
+              <i class="fas fa-table"></i>
+            <b>Оцінки</b></div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                        <th style="width: 25%">ID</th>
+                        <th style="width: 25%">Студент</th>
+                        <th style="width: 25%">Відвідування%</th>
+                        <th style="width: 25%">Середній бал</th>
+                    </tr>
+                  </thead>
+                 
+                    {% for sc in sc_list %}
+                    <tr>
+                        <td>{{ sc.student_id }}</td>
+                        <td>{{ sc.student.name }}</td>
+                        {% if sc.get_attendance < 75 %}
+                            <td class="p-3 mb-2 bg-danger text-white">{{ sc.get_attendance }}</td>
+                        {% else %}
+                            <td class="p-3 mb-2 bg-success text-white">{{ sc.get_attendance }}</td>
+                        {% endif %}
+                        {% if sc.get_cie < 3 %}
+                            <td class="p-3 mb-2 bg-danger text-white">{{ sc.get_cie }}</td>
+                        {% else %}
+                            <td class="p-3 mb-2 bg-success text-white">{{ sc.get_cie }}</td>
+                        {% endif %}
+                    </tr>
+                    {% empty %}
+                            <p>student has no courses</p>
+                    {% endfor %}               
+                </table> 
+                
+                   <input class="btn btn-danger" type="button" id="btnExport" value="Експортувати в PDF" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script type="text/javascript">
+        $("body").on("click", "#btnExport", function () {
+            html2canvas($('#dataTable')[0], {
+                onrendered: function (canvas) {
+                    var data = canvas.toDataURL();
+                    var docDefinition = {
+                        content: [{
+                            image: data,
+                            width: 500
+                        }]
+                    };
+                    pdfMake.createPdf(docDefinition).download("Відомість з предмету.pdf");
+                }
+            });
+        });
+    </script>
+              </div>
+            </div>
+          </div>
+     <div class="slider">
+                  <div class="slider__wrapper">
+                    <div class="slider__items">
+                      <div class="slider__item">
+                        <div id="air" style="height: 500px;"></div>
+                      </div>
+                      <div class="slider__item">
+                        <div id="air2" style="height: 500px;"></div>
+                      </div> 
+                    </div>
+                  </div>
+                  <a class="slider__control slider__control_prev" href="#" role="button"></a>
+                  <a class="slider__control slider__control_next" href="#" role="button"></a>
+                </div>
+                <script src="https://www.google.com/jsapi"></script>
+                          <script>
+                           google.load("visualization", "1", {packages:["corechart"]});
+                           google.setOnLoadCallback(drawChart);
+                           function drawChart() {
+                            var data = google.visualization.arrayToDataTable([
+                              ['Студент', 'Відвідування'],
+                           {% for sc in sc_list %}['{{ sc.student.name}}',parseFloat('{{ sc.get_attendance}}'.replace(/,/,'.'))],
+                             {% endfor %}
+                            ]);
+                                  var data2 = google.visualization.arrayToDataTable([
+                              ['Студент', 'Середній бал'],
+                           {% for sc in sc_list %}['{{ sc.student.name}}',parseFloat('{{ sc.get_cie}}'.replace(/,/,'.'))],
+                             {% endfor %}
+                            ]);
+                                  var options = {
+                                   title: 'Відвідування',
+                                   is3D: true,
+                                  };
+                            var options2 = {
+                             title: 'Середній бал',
+                             hAxis: {title: 'Студент'},
+                             vAxis: {title: 'Бал'}
+                            };
+                          
+                            var chart = new google.visualization.PieChart(document.getElementById('air'));
+                             chart.draw(data, options);
+                            var chart = new google.visualization.ColumnChart(document.getElementById('air2'));
+                             chart.draw(data2, options2);
+                           }
+                          </script>
+                          
+    {% endblock %}
