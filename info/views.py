@@ -7,7 +7,6 @@ from django.shortcuts import get_object_or_404, render, redirect
 # Create your views here.
 
 
-
 @login_required
 def index(request):
     if request.user.is_teacher:

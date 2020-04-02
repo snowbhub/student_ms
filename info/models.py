@@ -251,11 +251,11 @@ class Marks(models.Model):
         if self.marks1 == 0:
             return 2
         if self.marks1 == 2:
-            return 3
+            return 5
         if self.marks1 == 3:
             return 4
         if self.marks1 == 4:
-            return 4
+            return 5
         if self.marks1 == 5:
             return 5   
         return 2

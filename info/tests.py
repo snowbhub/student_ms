@@ -16,15 +16,15 @@ class InfoTest(TestCase):
     def test_user_creation(self):
         us = self.create_user()
         ut = self.create_user(username='teacher')
-        s = Student(user=us, USN='CS01', name='test')
+        s = Student(user=us, USN='20', name='test')
         s.save()
-        t = Teacher(user=ut, id='CS01', name='test')
+        t = Teacher(user=ut, id='20', name='test')
         t.save()
         self.assertTrue(isinstance(us, User))
         self.assertEqual(us.is_student, hasattr(us, 'student'))
         self.assertEqual(ut.is_teacher, hasattr(ut, 'teacher'))
 
-    def create_dept(self, id='CS', name='CS'):
+    def create_dept(self, id='5', name='test'):
         return Dept.objects.create(id=id, name=name)
 
     def test_dept_creation(self):
@@ -32,7 +32,7 @@ class InfoTest(TestCase):
         self.assertTrue(isinstance(d, Dept))
         self.assertEqual(d.__str__(), d.name)
 
-    def create_class(self, id='CS5A', sem=5, section='A'):
+    def create_class(self, id='123', sem=3, section='test'):
         dept = self.create_dept()
         return Class.objects.create(id=id, dept=dept, sem=sem, section=section)
 
@@ -41,8 +41,8 @@ class InfoTest(TestCase):
         self.assertTrue(isinstance(c, Class))
         self.assertEqual(c.__str__(), "%s : %d %s" % (c.dept.name, c.sem, c.section))
 
-    def create_course(self, id='CS510', name='Data Struct', shortname='DS'):
-        dept = self.create_dept(id='CS2')
+    def create_course(self, id='111', name='Test', shortname='TT'):
+        dept = self.create_dept(id='5')
         return Course.objects.create(id=id, dept=dept, name=name, shortname=shortname)
 
     def test_course_creation(self):
@@ -50,7 +50,7 @@ class InfoTest(TestCase):
         self.assertTrue(isinstance(c, Course))
         self.assertEqual(c.__str__(), c.name)
 
-    def create_student(self, usn='CS01', name='samarth'):
+    def create_student(self, usn='20', name='testname'):
         cl = self.create_class()
         u = self.create_user()
         return Student.objects.create(user=u, class_id=cl, USN=usn, name=name)
@@ -60,8 +60,8 @@ class InfoTest(TestCase):
         self.assertTrue(isinstance(s, Student))
         self.assertEqual(s.__str__(), s.name)
 
-    def create_teacher(self, id='CS01', name='teacher'):
-        dept = self.create_dept(id='CS3')
+    def create_teacher(self, id='20', name='teacher'):
+        dept = self.create_dept(id='5')
         return Teacher.objects.create(id=id, name=name, dept=dept)
 
     def test_teacher_creation(self):
