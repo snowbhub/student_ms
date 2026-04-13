@@ -1,5 +1,5 @@
 # student_ms
-Система управління студентами
+Система управління студентами розробив Шаповалюк Дмитро, студент групи ПІ-162
 [![Python Version](https://img.shields.io/badge/Python-3.7.6-brightgreen.svg)](https://python.org)
 [![Django Version](https://img.shields.io/badge/Django-2.1.2-green.svg)](https://djangoproject.com)
 
